@@ -1,5 +1,7 @@
 import pygame
+import pygame_menu
 import random
+import menu
 #test comit
 
 
@@ -67,6 +69,21 @@ while running:
                     Varspeed = 1
                     Strspeed = str(Varspeed)
                     SPEED = 0.1 * Varspeed
+            elif event.key == pygame.K_SPACE:
+                menuz = menu.PygameMenu(["Resume", "Shop", "Exit"])
+                selected_option = menuz.run()
+                if selected_option == "Exit":
+                    running = False
+                elif selected_option == "Resume":
+                    continue
+                elif selected_option == "Shop":
+                    shop_menuz = menu.PygameMenu(["Double Points: 25", "--", "Back"])
+                    selected_option = shop_menuz.run()
+                    if selected_option == "Double Points: 25":
+                        print("DoublePoints")
+                    elif selected_option == "Back":
+                        print("DoublePoints")
+
     # Move the square based on user input
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT]:
