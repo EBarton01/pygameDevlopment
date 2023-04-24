@@ -43,6 +43,9 @@ StrPoints = str(VarPoints)
 text_speed = font.render("Speed:", True, (0, 0, 0))
 text_points = font.render("points:", True, (0, 0, 0))
 
+#Inilitize the shop
+my_shop = shop.TheShop()
+
 def pause():
     menuz = menu.PygameMenu(["Resume", "Shop", "Exit"])
     selected_option = menuz.run() 
@@ -85,7 +88,7 @@ while running:
                     elif selected_option == "Resume":
                         paused = False
                     elif selected_option == "Shop":
-                        selection = shop.TheShop().open_shop()
+                        selection = my_shop.open_shop()
                         if selection < 0:
                             paused = False
                         else:
@@ -132,7 +135,7 @@ while running:
         rnd_width = random.randint(5,10)
         rnd_height = random.randint(5,10)
 
-        VarPoints += 1 * shop.TheShop().multiply()
+        VarPoints += 1 * my_shop.multiply()
         StrPoints = str(VarPoints)
 
     screen.blit(text_speed, (0, 0))
