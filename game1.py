@@ -2,6 +2,7 @@ import pygame
 import pygame_menu
 import random
 import menu
+import shop
 #test comit
 
 
@@ -42,6 +43,10 @@ StrPoints = str(VarPoints)
 text_speed = font.render("Speed:", True, (0, 0, 0))
 text_points = font.render("points:", True, (0, 0, 0))
 
+def pause():
+    menuz = menu.PygameMenu(["Resume", "Shop", "Exit"])
+    selected_option = menuz.run() 
+    return  selected_option
 
 # Add a main loop
 running = True
@@ -69,20 +74,22 @@ while running:
                     Varspeed = 1
                     Strspeed = str(Varspeed)
                     SPEED = 0.1 * Varspeed
+
             elif event.key == pygame.K_SPACE:
-                menuz = menu.PygameMenu(["Resume", "Shop", "Exit"])
-                selected_option = menuz.run()
-                if selected_option == "Exit":
-                    running = False
-                elif selected_option == "Resume":
-                    continue
-                elif selected_option == "Shop":
-                    shop_menuz = menu.PygameMenu(["Double Points: 25", "--", "Back"])
-                    selected_option = shop_menuz.run()
-                    if selected_option == "Double Points: 25":
-                        print("DoublePoints")
-                    elif selected_option == "Back":
-                        print("DoublePoints")
+                paused = True
+                while paused:
+                    selected_option = pause()
+                    if selected_option == "Exit":
+                        paused = False
+                        running = False
+                    elif selected_option == "Resume":
+                        paused = False
+                    elif selected_option == "Shop":
+                        selection = shop.TheShop().open_shop()
+                        if selection < 0:
+                            paused = False
+                        else:
+                            continue
 
     # Move the square based on user input
     keys = pygame.key.get_pressed()
@@ -125,7 +132,7 @@ while running:
         rnd_width = random.randint(5,10)
         rnd_height = random.randint(5,10)
 
-        VarPoints += 1
+        VarPoints += 1 * shop.TheShop().multiply()
         StrPoints = str(VarPoints)
 
     screen.blit(text_speed, (0, 0))
@@ -137,5 +144,4 @@ while running:
     pygame.display.flip()
 
 # Quit Pygame
-print(text_speed)
 pygame.quit()
