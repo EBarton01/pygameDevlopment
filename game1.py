@@ -3,14 +3,14 @@ import pygame
 import random
 import menu
 import shop
-import shared_stats
+from shared_stats import my_instance
 
 pygame.init()
 
 class Game:
     def __init__(self):
         #Inilitize the shop
-        self.my_stats = shared_stats.Stats()
+        self.my_stats = my_instance
         self.my_shop = shop.TheShop()
 
         # Set the window dimensions
@@ -94,8 +94,9 @@ class Game:
                                 selection = self.my_shop.open_shop()
                                 if selection < 0:
                                     if selection == -1:
-                                        print("ran")
-                                        self.VarPoints = self.VarPoints - 25
+                                        #print("ran")
+                                        self.my_stats.POINTS -= 25
+                                        self.VarPoints = self.my_stats.POINTS
                                         self.StrPoints = str(self.VarPoints)
                                         self.paused = False
                                 else:
@@ -142,7 +143,9 @@ class Game:
                 self.rnd_width = random.randint(5,10)
                 self.rnd_height = random.randint(5,10)
 
-                self.VarPoints += 1 * self.my_shop.multiply()
+                self.my_stats.POINTS = self.my_stats.POINTS + 1 * self.my_shop.multiply()
+                #print(self.my_stats.prnt())
+                self.VarPoints = self.my_stats.POINTS
                 self.StrPoints = str(self.VarPoints)
 
             self.screen.blit(self.text_speed, (0, 0))
