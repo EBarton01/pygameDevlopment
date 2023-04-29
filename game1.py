@@ -3,7 +3,9 @@ import pygame
 import random
 import menu
 import shop
+import enemy
 from shared_stats import my_instance
+from enemy import my_enemy_I
 
 pygame.init()
 
@@ -12,6 +14,7 @@ class Game:
         #Inilitize the shop
         self.my_stats = my_instance
         self.my_shop = shop.TheShop()
+        self.my_enemy = my_enemy_I
 
         # Set the window dimensions
         self.WINDOW_WIDTH = 640
@@ -49,6 +52,11 @@ class Game:
 
     def pause(self):
         menuz = menu.PygameMenu(["Resume", "Shop", "Exit"])
+        selected_option = menuz.run() 
+        return  selected_option
+    
+    def gameOver(self):
+        menuz = menu.PygameMenu(["GmaeOver", "--", "--"])
         selected_option = menuz.run() 
         return  selected_option
 
@@ -136,6 +144,13 @@ class Game:
 
             pygame.draw.rect(self.screen, (0, 0, 255), self.player)
             pygame.draw.rect(self.screen, (0, 0, 0), self.spot)
+            self.my_enemy.attack()
+            if self.my_stats.POINTS >= 3:
+                pygame.draw.rect(self.screen, (255, 0, 0), self.my_enemy.enemy)
+                #my_enemy_I.x += 0.3
+                #my_enemy_I.y = 200
+                #if my_enemy_I.x >= 625:
+                    #my_enemy_I.x = 0
 
             if self.player.colliderect(self.spot):
                 self.rnd_x = random.randint(20,600)
@@ -147,13 +162,18 @@ class Game:
                 #print(self.my_stats.prnt())
                 self.VarPoints = self.my_stats.POINTS
                 self.StrPoints = str(self.VarPoints)
+            elif self.player.colliderect(self.my_enemy.enemy):
+                self.gameOver()
+
+
 
             self.screen.blit(self.text_speed, (0, 0))
             self.screen.blit(self.text_speed_num, (90, 0))
             self.screen.blit(self.text_points, (510, 0))
             self.screen.blit(self.points_num, (610, 0))
 
-            # Update the screen
+            self.my_enemy.attack()
+
             pygame.display.flip()
 
         # Quit Pygame

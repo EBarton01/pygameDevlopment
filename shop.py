@@ -1,5 +1,4 @@
 import menu
-import shared_stats
 from shared_stats import my_instance
 
 class TheShop:
