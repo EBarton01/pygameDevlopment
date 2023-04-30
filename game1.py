@@ -56,9 +56,12 @@ class Game:
         return  selected_option
     
     def gameOver(self):
-        menuz = menu.PygameMenu(["GmaeOver", "--", "--"])
-        selected_option = menuz.run() 
-        return  selected_option
+        menuz = menu.PygameMenu(["Game Over"])
+        menuz.run()
+
+    def youWin(self):
+        menuz = menu.PygameMenu(["You Win!!"])
+        menuz.run()
 
 # Add a main loop
     def main_Loop(self):
@@ -95,6 +98,7 @@ class Game:
                             if selected_option == "Exit":
                                 self.running = False
                                 self.paused = False
+                                pygame.quit()
                                 break
                             elif selected_option == "Resume":
                                 self.paused = False
@@ -144,13 +148,16 @@ class Game:
 
             pygame.draw.rect(self.screen, (0, 0, 255), self.player)
             pygame.draw.rect(self.screen, (0, 0, 0), self.spot)
-            self.my_enemy.attack()
+
             if self.my_stats.POINTS >= 3:
+                self.my_enemy.attack_x()
                 pygame.draw.rect(self.screen, (255, 0, 0), self.my_enemy.enemy)
-                #my_enemy_I.x += 0.3
-                #my_enemy_I.y = 200
-                #if my_enemy_I.x >= 625:
-                    #my_enemy_I.x = 0
+            if self.my_stats.POINTS >= 5:
+                self.my_enemy.attack_y()
+                pygame.draw.rect(self.screen, (255, 0, 0), self.my_enemy.enemy1)
+            if self.my_stats.POINTS >= 7:
+                self.my_enemy.attack_y_()
+                pygame.draw.rect(self.screen, (255, 0, 0), self.my_enemy.enemy2)
 
             if self.player.colliderect(self.spot):
                 self.rnd_x = random.randint(20,600)
@@ -162,17 +169,20 @@ class Game:
                 #print(self.my_stats.prnt())
                 self.VarPoints = self.my_stats.POINTS
                 self.StrPoints = str(self.VarPoints)
-            elif self.player.colliderect(self.my_enemy.enemy):
+            elif self.player.colliderect(self.my_enemy.enemy) or self.player.colliderect(self.my_enemy.enemy1) or self.player.colliderect(self.my_enemy.enemy2):
                 self.gameOver()
+                break
 
+            #End The Game
+            if self.my_stats.POINTS >= 50:
+                self.youWin()
+                break
 
 
             self.screen.blit(self.text_speed, (0, 0))
             self.screen.blit(self.text_speed_num, (90, 0))
             self.screen.blit(self.text_points, (510, 0))
             self.screen.blit(self.points_num, (610, 0))
-
-            self.my_enemy.attack()
 
             pygame.display.flip()
 
